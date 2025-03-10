@@ -1,0 +1,44 @@
+name: CI And Build
+
+on:
+  push:
+    branch:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  ci_and_build:
+    name: CI And Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load Checkout
+        uses: actions/cehckout@v4
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          component: cargo, clippy, rustfmt
+      - name: Cache Cargo Registry
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore: |
+            ${{ runner.os }}-cargo-registry-
+      - name: Cache Cargo Index
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.toml') }}
+          restore: |
+            ${{ runner.os }}-cargo-git-
+      - name: Install Dependencies
+        run: cargo fetch
+      - name: Run Clippy
+        run: cargo clippy
+      - name: Run Rustfmt
+        run: rustfmt --verbose src/*
+      - name: Build
+        run: cargo build
