@@ -1,4 +1,4 @@
-name: CI And Build
+name: CI And Check
 
 on:
   push:
@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  ci_and_build:
-    name: CI And Build
+  ci_and_check:
+    name: CI And Check
     runs-on: ubuntu-latest
     steps:
       - name: Load Checkout
@@ -40,5 +40,9 @@ jobs:
         run: cargo clippy
       - name: Run Rustfmt
         run: rustfmt --verbose src/*
-      - name: Build
-        run: cargo build
+      - name: Check
+        run: cargo check
+      - name: commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: change: Format .rs file by GithubActions
