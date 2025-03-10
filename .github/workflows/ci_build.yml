@@ -19,20 +19,20 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          component: cargo, clippy, rustfmt
+          components: cargo, clippy, rustfmt
       - name: Cache Cargo Registry
         uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          restore: |
+          restore-keys: |
             ${{ runner.os }}-cargo-registry-
       - name: Cache Cargo Index
         uses: actions/cache@v4
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.toml') }}
-          restore: |
+          restore-keys: |
             ${{ runner.os }}-cargo-git-
       - name: Install Dependencies
         run: cargo fetch
