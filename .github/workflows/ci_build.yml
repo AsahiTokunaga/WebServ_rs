@@ -28,7 +28,7 @@ jobs:
           restore: |
             ${{ runner.os }}-cargo-registry-
       - name: Cache Cargo Index
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.toml') }}
