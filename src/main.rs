@@ -6,6 +6,8 @@ use std::{
 };
 use dotenv::dotenv;
 
+const ALLOW_REQUESTS: [&str; 2] = ["GET / HTTP/1.1", "GET /index.html HTTP/1.1"];
+
 enum HttpResponce {
     OK,
     NotFound,
@@ -36,7 +38,7 @@ fn handler(mut stream: TcpStream) {
 
     println!("Request: {}", request_line);
 
-    let (status_line, contents) = if request_line == "GET / HTTP/1.1" {
+    let (status_line, contents) = if ALLOW_REQUESTS.iter().any(|r| *r == request_line) {
         (HttpResponce::OK.to_string(), fs::read_to_string("index.html").unwrap())
     } else {
         (HttpResponce::NotFound.to_string(), fs::read_to_string("not_found.html").unwrap())
