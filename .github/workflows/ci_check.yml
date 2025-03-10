@@ -42,7 +42,5 @@ jobs:
         run: rustfmt --verbose src/*
       - name: Check
         run: cargo check
-      - name: commit
+      - name: Commit
         uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: change: Format .rs file by GithubActions
